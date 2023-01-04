@@ -1,4 +1,4 @@
-use std::fs;
+use std::{env, fs};
 use serde::{Deserialize, Serialize};
 
 const TODO_FILE_NAME: &str = "data.json";
@@ -29,7 +29,17 @@ fn show_all_todo_list(todo_list: &TodoList) {
     }
 }
 
+fn print_usage() {
+    const USAGE: &str = "[USAGE] todo [--help] <command>";
+    println!("{}", USAGE);
+}
+
 fn main() {
+    let args: Vec<String> = env::args().collect();
+
     let todo_list = read_todo_list();
-    show_all_todo_list(&todo_list);
+    if args.len() < 2 {
+        show_all_todo_list(&todo_list);
+        return;
+    }
 }
