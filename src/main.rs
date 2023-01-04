@@ -34,6 +34,13 @@ fn print_usage() {
     println!("{}", USAGE);
 }
 
+fn match_option(option: &str) {
+    match option {
+        "--help" => print_usage(),
+        _ => print_usage(),
+    }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -42,4 +49,7 @@ fn main() {
         show_all_todo_list(&todo_list);
         return;
     }
+
+    let option = &args[1];
+    match_option(option);
 }
