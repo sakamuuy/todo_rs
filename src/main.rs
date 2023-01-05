@@ -1,4 +1,5 @@
 use std::env;
+mod io;
 mod todo;
 
 enum Command {
@@ -20,11 +21,22 @@ fn print_usage() {
         "complete - Complete a todo.\n");
 }
 
+fn input_prompt(msg: &str) -> String {
+    println!("{}", msg);
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).expect("Input error");
+    input.trim().to_string()
+}
 
 fn match_command(command: Command, todo_list: &todo::TodoList) {
     match command {
         Command::List => todo::show_all_todo_list(&todo_list),
-        Command::Add => println!("do add"),
+        Command::Add => {
+            let due = input_prompt("Input due date for new Todo.(YYYY/MM/DD)");
+            let title = input_prompt("Input title for new Todo.");
+            let description = input_prompt("Input description for new Todo.");
+            let new_todo_list = todo::add_new_todo(&due, &title, &description, todo_list);
+        },
         Command::Complete=> println!("do complete"),
         _ => print_usage(),
     }
@@ -71,7 +83,7 @@ fn parse_args(args: &Vec<String>) -> Input {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let todo_list = todo::read_todo_list();
+    let todo_list = io::read_todo_list();
     if args.len() < 2 {
         print_usage();
         return;
