@@ -6,19 +6,22 @@ enum Command {
     List,
     Add,
     Complete,
-    Noop
+    Noop,
 }
 
 struct Input {
-    command: Command
+    command: Command,
 }
 
 fn print_usage() {
-    println!("{}{}{}{}{}", "[USAGE] todo <command>\n",
+    println!(
+        "{}{}{}{}{}",
+        "[USAGE] todo <command>\n",
         "<command>\n",
         "add - Add a new todo.\n",
         "list - List all todos.\n",
-        "complete - Complete a todo.\n");
+        "complete - Complete a todo.\n"
+    );
 }
 
 fn input_prompt(msg: &str) -> String {
@@ -36,13 +39,13 @@ fn match_command(command: Command, todo_list: &todo::TodoList) {
             let title = input_prompt("Input title for new Todo.");
             let description = input_prompt("Input description for new Todo.");
             let new_todo_list = todo::add_new_todo(&due, &title, &description, todo_list);
-        },
-        Command::Complete=> println!("do complete"),
+        }
+        Command::Complete => println!("do complete"),
         _ => print_usage(),
     }
 }
 
-// Todo: 
+// Todo:
 fn _match_option(option: &str) {
     match option {
         "--help" => print_usage(),
@@ -63,20 +66,20 @@ fn parse_args(args: &Vec<String>) -> Input {
 
     if &args[1] == "list" {
         return Input {
-            command: Command::List
+            command: Command::List,
         };
     } else if &args[1] == "add" {
         return Input {
-            command: Command::Add
+            command: Command::Add,
         };
     } else if &args[1] == "complete" {
         return Input {
-            command: Command::Complete
-        }
+            command: Command::Complete,
+        };
     } else {
         return Input {
-            command: Command::Noop
-        }
+            command: Command::Noop,
+        };
     }
 }
 

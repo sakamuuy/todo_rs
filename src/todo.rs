@@ -4,12 +4,12 @@ use serde::{Deserialize, Serialize};
 pub struct Todo {
     pub due: String,
     pub title: String,
-    pub description: String
+    pub description: String,
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct TodoList{
-    pub todos: Vec<Todo>
+pub struct TodoList {
+    pub todos: Vec<Todo>,
 }
 
 pub fn show_all_todo_list(todo_list: &TodoList) {
@@ -18,7 +18,12 @@ pub fn show_all_todo_list(todo_list: &TodoList) {
     }
 }
 
-pub fn add_new_todo(due: &str, title: &str, description: &str, current_todo_list: &TodoList) -> TodoList {
+pub fn add_new_todo(
+    due: &str,
+    title: &str,
+    description: &str,
+    current_todo_list: &TodoList,
+) -> TodoList {
     let todo: Todo = Todo {
         due: String::from(due),
         title: String::from(title),
@@ -26,5 +31,7 @@ pub fn add_new_todo(due: &str, title: &str, description: &str, current_todo_list
     };
     let mut new_todo_list = current_todo_list.todos.clone();
     new_todo_list.push(todo);
-    return TodoList { todos: new_todo_list }
+    return TodoList {
+        todos: new_todo_list,
+    };
 }
