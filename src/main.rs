@@ -1,12 +1,11 @@
 use std::env;
-use regex::Regex;
 mod todo;
 
 enum Command {
-    list,
-    add,
-    complete,
-    noop
+    List,
+    Add,
+    Complete,
+    Noop
 }
 
 struct Input {
@@ -22,11 +21,11 @@ fn print_usage() {
 }
 
 
-fn match_command(command: Command) {
+fn match_command(command: Command, todo_list: &todo::TodoList) {
     match command {
-        Command::list => println!("do list"),
-        Command::add => println!("do add"),
-        Command::complete=> println!("do complete"),
+        Command::List => todo::show_all_todo_list(&todo_list),
+        Command::Add => println!("do add"),
+        Command::Complete=> println!("do complete"),
         _ => print_usage(),
     }
 }
@@ -39,7 +38,7 @@ fn _match_option(option: &str) {
     }
 }
 
-fn parseArgs(args: &Vec<String>) -> Input {
+fn parse_args(args: &Vec<String>) -> Input {
     // Todo: implement parse options
     // let reg = Regex::new(r"--.*").unwrap();
     // let options = reg.captures(&args[1]).unwrap();
@@ -52,19 +51,19 @@ fn parseArgs(args: &Vec<String>) -> Input {
 
     if &args[1] == "list" {
         return Input {
-            command: Command::list
+            command: Command::List
         };
     } else if &args[1] == "add" {
         return Input {
-            command: Command::add
+            command: Command::Add
         };
     } else if &args[1] == "complete" {
         return Input {
-            command: Command::complete
+            command: Command::Complete
         }
     } else {
         return Input {
-            command: Command::noop
+            command: Command::Noop
         }
     }
 }
@@ -75,11 +74,9 @@ fn main() {
     let todo_list = todo::read_todo_list();
     if args.len() < 2 {
         print_usage();
-        todo::show_all_todo_list(&todo_list);
         return;
     }
 
-    let input: Input = parseArgs(&args);
-    // match_option(option);
-    match_command(input.command);
+    let input: Input = parse_args(&args);
+    match_command(input.command, &todo_list);
 }
