@@ -39,6 +39,7 @@ fn match_command(command: Command, todo_list: &todo::TodoList) {
             let title = input_prompt("Input title for new Todo.");
             let description = input_prompt("Input description for new Todo.");
             let new_todo_list = todo::add_new_todo(&due, &title, &description, todo_list);
+            io::write_todo_list(&new_todo_list).expect("Failed to write new todos.");
         }
         Command::Complete => println!("do complete"),
         _ => print_usage(),
