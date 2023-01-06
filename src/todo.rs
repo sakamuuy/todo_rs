@@ -89,20 +89,55 @@ pub fn remove_todo(id: usize, current_todo_list: &TodoList) -> TodoList {
 
 #[cfg(test)]
 mod tests {
-    use super::{generate_id, Todo, TodoList};
+    use super::{add_new_todo, generate_id, remove_todo, Todo, TodoList};
 
-    #[test]
-    fn test_generate_id() {
-        let t = Todo {
+    fn generate_todo() -> Todo {
+        return Todo {
             id: 1,
             due: "2099/01/01".to_string(),
             title: "test".to_string(),
             description: "test".to_string(),
             is_completed: false,
         };
+    }
+
+    #[test]
+    fn test_generate_id() {
+        let t = generate_todo();
         let tl = TodoList { todos: vec![t] };
         assert_eq!(generate_id(&tl), 2);
         let tl = TodoList { todos: vec![] };
         assert_eq!(generate_id(&tl), 1);
+    }
+
+    #[test]
+    fn test_add_new_todo() {
+        let tl = TodoList { todos: vec![] };
+        assert_eq!(
+            add_new_todo("2099/01/01", "test", "test", &tl).todos.len(),
+            1
+        );
+
+        let t = generate_todo();
+        let tl = TodoList { todos: vec![t] };
+        assert_eq!(
+            add_new_todo("2099/01/01", "test", "test", &tl).todos.len(),
+            2
+        );
+    }
+
+    #[test]
+    fn test_remove_todo() {
+        let t = generate_todo();
+        let tl = TodoList { todos: vec![t] };
+        assert_eq!(remove_todo(1, &tl).todos.len(), 0);
+    }
+
+    #[test]
+    fn test_completed() {
+        let mut t = generate_todo();
+        assert_eq!(t.is_completed, false);
+        t.completed();
+        assert_eq!(t.is_completed, true);
     }
 }
