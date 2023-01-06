@@ -70,7 +70,7 @@ fn match_command(command: Command, todo_list: &mut todo::TodoList) {
     }
 }
 
-// Todo:
+// TODO:
 fn _match_option(option: &str) {
     match option {
         "--help" => print_usage(),
@@ -79,15 +79,7 @@ fn _match_option(option: &str) {
 }
 
 fn parse_args(args: &Vec<String>) -> Input {
-    // Todo: implement parse options
-    // let reg = Regex::new(r"--.*").unwrap();
-    // let options = reg.captures(&args[1]).unwrap();
-    // let option = options.get(1).unwrap().as_str();
-    // println!("opt: {}", option);
-    // let options: Vec<&str> = args[1].matches("--").collect();
-    // if !options.is_empty() {
-    //     println!("opt: {}", options[0]);
-    // }
+    // TODO: implement parse options
 
     if &args[1] == "list" {
         return Input {
