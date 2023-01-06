@@ -1,3 +1,5 @@
+use std::ops::Index;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -9,6 +11,18 @@ pub struct Todo {
     pub is_completed: bool,
 }
 
+impl Todo {
+    pub fn completed(&mut self) {
+        self.is_completed = true;
+    }
+}
+
+impl PartialEq for Todo {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct TodoList {
     pub todos: Vec<Todo>,
@@ -16,7 +30,7 @@ pub struct TodoList {
 
 pub fn show_all_todo_list(todo_list: &TodoList) {
     for todo in todo_list.todos.to_vec() {
-        println!("- [] {}", todo.title);
+        println!("- [] |{}| {}", todo.id, todo.title);
     }
 }
 
@@ -40,7 +54,7 @@ pub fn add_new_todo(
 ) -> TodoList {
     let id = generate_id(&current_todo_list);
     let todo: Todo = Todo {
-        id: id,
+        id,
         due: String::from(due),
         title: String::from(title),
         description: String::from(description),

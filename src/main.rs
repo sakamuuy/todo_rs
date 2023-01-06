@@ -31,7 +31,7 @@ fn input_prompt(msg: &str) -> String {
     input.trim().to_string()
 }
 
-fn match_command(command: Command, todo_list: &todo::TodoList) {
+fn match_command(command: Command, todo_list: &mut todo::TodoList) {
     match command {
         Command::List => todo::show_all_todo_list(&todo_list),
         Command::Add => {
@@ -41,7 +41,22 @@ fn match_command(command: Command, todo_list: &todo::TodoList) {
             let new_todo_list = todo::add_new_todo(&due, &title, &description, todo_list);
             io::write_todo_list(&new_todo_list).expect("Failed to write new todos.");
         }
-        Command::Complete => println!("do complete"),
+        Command::Complete => {
+            let id = input_prompt("Input id of todo you have been completed.");
+            // let mut target = todo_list.todos.iter().find(|t| t.id.to_string() == id).unwrap();
+            // target.completed();
+            // todo_list.todos.iter().for_each(|t| {
+            //     if t.id.to_string() == id {
+            //         t.completed();
+            //     }
+            // })
+            for todo in todo_list.todos.iter_mut() {
+                if todo.id.to_string() == id {
+                    todo.completed();
+                }
+            }
+            io::write_todo_list(todo_list).expect("Failed to write.");
+        }
         _ => print_usage(),
     }
 }
@@ -87,12 +102,12 @@ fn parse_args(args: &Vec<String>) -> Input {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let todo_list = io::read_todo_list();
+    let mut todo_list = io::read_todo_list();
     if args.len() < 2 {
         print_usage();
         return;
     }
 
     let input: Input = parse_args(&args);
-    match_command(input.command, &todo_list);
+    match_command(input.command, &mut todo_list);
 }
