@@ -18,7 +18,7 @@ struct Input {
 fn print_usage() {
     println!(
         "{}{}{}{}{}{}{}",
-        "[USAGE] todo <command>\n",
+        "[USAGE] cargo run -- <command>\n",
         "<command>\n",
         "add      - Add a new todo.\n",
         "list     - List all todos.\n",
