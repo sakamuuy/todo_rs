@@ -2,9 +2,11 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Todo {
+    pub id: usize,
     pub due: String,
     pub title: String,
     pub description: String,
+    pub is_completed: bool
 }
 
 #[derive(Serialize, Deserialize)]
@@ -24,10 +26,18 @@ pub fn add_new_todo(
     description: &str,
     current_todo_list: &TodoList,
 ) -> TodoList {
+    let mut id: usize = 1;
+    for todo in current_todo_list.todos.into_iter() {
+        if todo.id == id {
+            id = todo.id + 1;
+        }
+    }
     let todo: Todo = Todo {
+        id: id,
         due: String::from(due),
         title: String::from(title),
         description: String::from(description),
+        is_completed: false
     };
     let mut new_todo_list = current_todo_list.todos.clone();
     new_todo_list.push(todo);
