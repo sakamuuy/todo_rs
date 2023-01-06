@@ -6,6 +6,7 @@ enum Command {
     List,
     Add,
     Complete,
+    Patch,
     Noop,
 }
 
@@ -15,12 +16,13 @@ struct Input {
 
 fn print_usage() {
     println!(
-        "{}{}{}{}{}",
+        "{}{}{}{}{}{}",
         "[USAGE] todo <command>\n",
         "<command>\n",
-        "add - Add a new todo.\n",
-        "list - List all todos.\n",
-        "complete - Complete a todo.\n"
+        "add      - Add a new todo.\n",
+        "list     - List all todos.\n",
+        "complete - Complete a todo.\n",
+        "patch    - Edit a todo.\n"
     );
 }
 
@@ -43,16 +45,23 @@ fn match_command(command: Command, todo_list: &mut todo::TodoList) {
         }
         Command::Complete => {
             let id = input_prompt("Input id of todo you have been completed.");
-            // let mut target = todo_list.todos.iter().find(|t| t.id.to_string() == id).unwrap();
-            // target.completed();
-            // todo_list.todos.iter().for_each(|t| {
-            //     if t.id.to_string() == id {
-            //         t.completed();
-            //     }
-            // })
             for todo in todo_list.todos.iter_mut() {
                 if todo.id.to_string() == id {
                     todo.completed();
+                }
+            }
+            io::write_todo_list(todo_list).expect("Failed to write.");
+        }
+        Command::Patch => {
+            let id = input_prompt("Input id of todo you have been completed.");
+            let due = input_prompt("Input due date for new Todo.(YYYY/MM/DD)");
+            let title = input_prompt("Input title for new Todo.");
+            let description = input_prompt("Input description for new Todo.");
+            for todo in todo_list.todos.iter_mut() {
+                if todo.id.to_string() == id {
+                    todo.due = due.to_owned();
+                    todo.title = title.to_owned();
+                    todo.description = description.to_owned();
                 }
             }
             io::write_todo_list(todo_list).expect("Failed to write.");
@@ -91,6 +100,10 @@ fn parse_args(args: &Vec<String>) -> Input {
     } else if &args[1] == "complete" {
         return Input {
             command: Command::Complete,
+        };
+    } else if &args[1] == "patch" {
+        return Input {
+            command: Command::Patch,
         };
     } else {
         return Input {
