@@ -74,3 +74,15 @@ pub fn add_new_todo(
         todos: new_todo_list,
     };
 }
+
+pub fn remove_todo(id: usize, current_todo_list: &TodoList) -> TodoList {
+    let removed_todos = current_todo_list
+        .todos
+        .iter()
+        .filter(|t| t.id != id)
+        .cloned()
+        .collect();
+    return TodoList {
+        todos: removed_todos,
+    };
+}

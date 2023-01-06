@@ -7,6 +7,7 @@ enum Command {
     Add,
     Complete,
     Patch,
+    Delete,
     Noop,
 }
 
@@ -16,13 +17,14 @@ struct Input {
 
 fn print_usage() {
     println!(
-        "{}{}{}{}{}{}",
+        "{}{}{}{}{}{}{}",
         "[USAGE] todo <command>\n",
         "<command>\n",
         "add      - Add a new todo.\n",
         "list     - List all todos.\n",
         "complete - Complete a todo.\n",
-        "patch    - Edit a todo.\n"
+        "patch    - Edit a todo.\n",
+        "delete   - Delete a todo.\n"
     );
 }
 
@@ -53,10 +55,10 @@ fn match_command(command: Command, todo_list: &mut todo::TodoList) {
             io::write_todo_list(todo_list).expect("Failed to write.");
         }
         Command::Patch => {
-            let id = input_prompt("Input id of todo you have been completed.");
-            let due = input_prompt("Input due date for new Todo.(YYYY/MM/DD)");
-            let title = input_prompt("Input title for new Todo.");
-            let description = input_prompt("Input description for new Todo.");
+            let id = input_prompt("Input id of todo you edit.");
+            let due = input_prompt("Input due date.(YYYY/MM/DD)");
+            let title = input_prompt("Input title.");
+            let description = input_prompt("Input description.");
             for todo in todo_list.todos.iter_mut() {
                 if todo.id.to_string() == id {
                     todo.due = due.to_owned();
@@ -65,6 +67,12 @@ fn match_command(command: Command, todo_list: &mut todo::TodoList) {
                 }
             }
             io::write_todo_list(todo_list).expect("Failed to write.");
+        }
+        Command::Delete => {
+            let id = input_prompt("Input id of todo you delete.");
+            let id = id.parse().unwrap();
+            let removed_todo_list = todo::remove_todo(id, todo_list);
+            io::write_todo_list(&removed_todo_list).expect("Failed to remove.");
         }
         _ => print_usage(),
     }
@@ -96,6 +104,10 @@ fn parse_args(args: &Vec<String>) -> Input {
     } else if &args[1] == "patch" {
         return Input {
             command: Command::Patch,
+        };
+    } else if &args[1] == "delete" {
+        return Input {
+            command: Command::Delete,
         };
     } else {
         return Input {
