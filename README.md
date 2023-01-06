@@ -13,7 +13,7 @@ This is an application created as an output by the author[@sakamuuy] is studying
 
 ## Instalation
 ```
-$ git clone 
+$ git clone git@github.com:sakamuuy/todo_rs.git 
 $ cargo run # This command show usages.
 ```
 
