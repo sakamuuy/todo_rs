@@ -86,3 +86,23 @@ pub fn remove_todo(id: usize, current_todo_list: &TodoList) -> TodoList {
         todos: removed_todos,
     };
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{generate_id, Todo, TodoList};
+
+    #[test]
+    fn test_generate_id() {
+        let t = Todo {
+            id: 1,
+            due: "2099/01/01".to_string(),
+            title: "test".to_string(),
+            description: "test".to_string(),
+            is_completed: false,
+        };
+        let tl = TodoList { todos: vec![t] };
+        assert_eq!(generate_id(&tl), 2);
+        let tl = TodoList { todos: vec![] };
+        assert_eq!(generate_id(&tl), 1);
+    }
+}
