@@ -78,17 +78,7 @@ fn match_command(command: Command, todo_list: &mut todo::TodoList) {
     }
 }
 
-// TODO:
-fn _match_option(option: &str) {
-    match option {
-        "--help" => print_usage(),
-        _ => print_usage(),
-    }
-}
-
 fn parse_args(args: &Vec<String>) -> Input {
-    // TODO: implement parse options
-
     if &args[1] == "list" {
         return Input {
             command: Command::List,
