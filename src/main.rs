@@ -2,6 +2,7 @@ use std::env;
 mod io;
 mod todo;
 
+#[derive(PartialEq, Debug)]
 enum Command {
     List,
     Add,
@@ -117,4 +118,30 @@ fn main() {
 
     let input: Input = parse_args(&args);
     match_command(input.command, &mut todo_list);
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+
+    #[test]
+    fn test_parse_args() {
+        let mut args: Vec<String> = vec![String::from(""), String::from("list")];
+        assert_eq!(parse_args(&args).command, Command::List);
+
+        args[1] = String::from("add");
+        assert_eq!(parse_args(&args).command, Command::Add);
+
+        args[1] = String::from("complete");
+        assert_eq!(parse_args(&args).command, Command::Complete);
+
+        args[1] = String::from("patch");
+        assert_eq!(parse_args(&args).command, Command::Patch);
+
+        args[1] = String::from("delete");
+        assert_eq!(parse_args(&args).command, Command::Delete);
+
+        args[1] = String::from("");
+        assert_eq!(parse_args(&args).command, Command::Noop);
+    }
 }
