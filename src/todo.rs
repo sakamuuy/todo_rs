@@ -13,6 +13,15 @@ impl Todo {
     pub fn completed(&mut self) {
         self.is_completed = true;
     }
+
+    pub fn format_for_out(&self) -> String {
+        let list_item = if *&self.is_completed { "[x]" } else { "[ ]" };
+        let pad = "          ";
+        format!(
+            "- {} |{}| {}\n{}{}\n{}{}",
+            list_item, &self.id, &self.title, pad, &self.due, pad, &self.description
+        )
+    }
 }
 
 impl PartialEq for Todo {
@@ -28,7 +37,7 @@ pub struct TodoList {
 
 pub fn show_all_todo_list(todo_list: &TodoList) {
     for todo in todo_list.todos.to_vec() {
-        println!("- [] |{}| {}", todo.id, todo.title);
+        println!("{}", todo.format_for_out());
     }
 }
 
